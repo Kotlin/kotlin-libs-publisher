@@ -94,7 +94,7 @@ private fun Project.applyPomConfigurators(pom: MavenPom): MavenPom {
     }
 }
 
-private fun <T: Any> Project.getFirstExt(getter: PublicationsExtension.() -> T?): T? {
+private fun <T : Any> Project.getFirstExt(getter: PublicationsExtension.() -> T?): T? {
     return parentProjects().mapNotNull { it.getPublicationsExtension()?.getter() }.firstOrNull()
 }
 
@@ -168,7 +168,7 @@ private fun Project.addPublication(settings: ArtifactPublication) {
     rootProject.tasks {
         named("publishLocal") {
             val projectPrefix = if (thisProject != rootProject) ":$thisProjectName" else ""
-            dependsOn( "$projectPrefix:publishAllPublicationsToLocalBuildRepository")
+            dependsOn("$projectPrefix:publishAllPublicationsToLocalBuildRepository")
         }
 
         if (settings.publishToSonatype && sonatypeSettings != null) {

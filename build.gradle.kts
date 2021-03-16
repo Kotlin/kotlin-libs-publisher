@@ -6,6 +6,7 @@ plugins {
 }
 
 group = "ru.ileasile"
+version = detectVersion()
 
 fun detectVersion(): String {
     val buildNumber = rootProject.findProperty("build.number") as String?
@@ -22,13 +23,13 @@ fun detectVersion(): String {
     }
 }
 
-version = detectVersion()
-
 val detectVersionForTC by tasks.registering {
     doLast {
         println("##teamcity[buildNumber '$version']")
     }
 }
+
+val junitVersion: String by project
 
 repositories {
     jcenter()
@@ -43,6 +44,20 @@ dependencies {
 
     // For maven-publish
     implementation(gradleApi())
+
+    // Test dependencies: kotlin-test and Junit 5
+    testImplementation(kotlin("test"))
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+    testImplementation("io.kotlintest:kotlintest-assertions:3.1.6")
+
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+}
+
+tasks.test {
+    useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed")
+    }
 }
 
 val publishingPlugin = "publishing"

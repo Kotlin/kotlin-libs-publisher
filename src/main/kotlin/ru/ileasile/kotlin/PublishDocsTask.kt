@@ -5,7 +5,7 @@ import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
 import org.gradle.kotlin.dsl.property
 
-abstract class PublishDocsTask: DefaultTask() {
+abstract class PublishDocsTask : DefaultTask() {
     @Input
     val docsRepoUrl: Property<String> = project.objects.property()
 

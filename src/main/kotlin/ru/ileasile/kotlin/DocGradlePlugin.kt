@@ -10,7 +10,7 @@ import org.jetbrains.dokka.gradle.DokkaMultiModuleTask
 import org.jetbrains.dokka.gradle.DokkaPlugin
 import java.io.OutputStream
 
-class DocGradlePlugin: Plugin<Project> {
+class DocGradlePlugin : Plugin<Project> {
     override fun apply(target: Project): Unit = with(target) {
         pluginManager.run {
             apply(DokkaPlugin::class.java)
@@ -58,7 +58,7 @@ class DocGradlePlugin: Plugin<Project> {
                 }
                 if (commitResult.exitValue == 0) {
                     execGit("push", "-u", repoUrl, branchName) {
-                        this.standardOutput = object: OutputStream() {
+                        this.standardOutput = object : OutputStream() {
                             override fun write(b: Int) { }
                         }
                     }
