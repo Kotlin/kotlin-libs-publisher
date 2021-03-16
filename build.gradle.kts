@@ -38,8 +38,8 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.4.20")
-    implementation("io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.22.0")
+    implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.4.30")
+    implementation("io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.30.0")
     implementation("de.marcphilipp.gradle:nexus-publish-plugin:0.4.0")
 
     // For maven-publish
@@ -48,7 +48,7 @@ dependencies {
     // Test dependencies: kotlin-test and Junit 5
     testImplementation(kotlin("test"))
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
-    testImplementation("io.kotlintest:kotlintest-assertions:3.1.6")
+    testImplementation("io.kotlintest:kotlintest-assertions:3.4.2")
 
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
 }

@@ -1,5 +1,6 @@
 package ru.ileasile.kotlin
 
+import groovy.lang.Closure
 import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.api.publish.PublishingExtension
@@ -7,10 +8,12 @@ import org.gradle.api.publish.maven.MavenPom
 import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.bundling.Jar
+import org.gradle.kotlin.dsl.extra
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.getByName
 import org.gradle.kotlin.dsl.invoke
 import org.gradle.plugins.signing.SigningExtension
+import org.gradle.util.ConfigureUtil
 import org.jetbrains.dokka.gradle.DokkaTask
 import java.io.File
 import java.nio.file.Path
@@ -35,6 +38,9 @@ class PublicationsExtension(private val project: Project) {
     fun pom(configurator: PomConfigurator) {
         _pomConfigurator = configurator
     }
+    fun pom(configurator: Closure<in MavenPom>) {
+        _pomConfigurator = ConfigureUtil.configureUsing(configurator)
+    }
 
     private var _signingCredentials: SigningCredentials? = null
     fun signingCredentials(): SigningCredentials? = _signingCredentials
@@ -54,6 +60,18 @@ class PublicationsExtension(private val project: Project) {
         password: String?,
         repositoryDescription: String
     ) {
+        project.extra[MAIN_PROJECT_MARK_PROP_NAME] = true
+
+        project.tasks.register("publishLocal") {
+            group = "publishing"
+        }
+
+        project.tasks.register("publishToSonatypeAndRelease") {
+            group = "publishing"
+
+            dependsOn("publishToSonatype", "closeAndReleaseRepository")
+        }
+
         val settings = SonatypeSettings(username, password, repositoryDescription)
         _sonatypeSettings = settings
         project.applyNexusPlugin(settings, packageGroup)
@@ -65,18 +83,26 @@ class PublicationsExtension(private val project: Project) {
 
     var packageGroup: String? = null
 
-    fun add(publication: ArtifactPublication) {
+    fun publication(publication: ArtifactPublication) {
         project.addPublication(publication)
     }
 
-    fun add(configuration: Action<in ArtifactPublication>) {
+    fun publication(configuration: Action<in ArtifactPublication>) {
         val res = ArtifactPublication()
         configuration(res)
-        add(res)
+        publication(res)
+    }
+
+    fun publication(configuration: Closure<in ArtifactPublication>) {
+        val res = ArtifactPublication()
+        configuration.delegate = res
+        configuration(res)
+        publication(res)
     }
 
     companion object {
         const val NAME = "kotlinPublications"
+        const val MAIN_PROJECT_MARK_PROP_NAME = "isPublicationsMainProject"
     }
 }
 
@@ -99,7 +125,7 @@ private fun <T : Any> Project.getFirstExt(getter: PublicationsExtension.() -> T?
 }
 
 private fun Project.addPublication(settings: ArtifactPublication) {
-    if (rootProject.findProperty("isMainProject") != true) return
+    if (rootProject.findProperty(PublicationsExtension.MAIN_PROJECT_MARK_PROP_NAME) != true) return
 
     val sourceSets = extensions.getByName("sourceSets") as SourceSetContainer
     val mainSourceSet = sourceSets.named("main").get()
