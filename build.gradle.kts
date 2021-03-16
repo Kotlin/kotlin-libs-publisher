@@ -6,7 +6,29 @@ plugins {
 }
 
 group = "ru.ileasile"
-version = "0.0.2"
+
+fun detectVersion(): String {
+    val buildNumber = rootProject.findProperty("build.number") as String?
+    return if (buildNumber != null) {
+        if (hasProperty("build.number.detection")) {
+            "$version-dev-$buildNumber"
+        } else {
+            buildNumber
+        }
+    } else if (hasProperty("release")) {
+        version as String
+    } else {
+        "$version-dev"
+    }
+}
+
+version = detectVersion()
+
+val detectVersionForTC by tasks.registering {
+    doLast {
+        println("##teamcity[buildNumber '$version']")
+    }
+}
 
 repositories {
     jcenter()
