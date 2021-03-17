@@ -39,8 +39,7 @@ repositories {
 
 dependencies {
     implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.4.30")
-    implementation("io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.30.0")
-    implementation("de.marcphilipp.gradle:nexus-publish-plugin:0.4.0")
+    implementation("io.github.gradle-nexus:publish-plugin:1.0.0")
 
     // For maven-publish
     implementation(gradleApi())

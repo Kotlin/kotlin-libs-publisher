@@ -69,7 +69,7 @@ class PublicationsExtension(private val project: Project) {
         project.tasks.register("publishToSonatypeAndRelease") {
             group = "publishing"
 
-            dependsOn("publishToSonatype", "closeAndReleaseRepository")
+            dependsOn("publishToSonatype", "closeAndReleaseStagingRepository")
         }
 
         val settings = SonatypeSettings(username, password, repositoryDescription)
@@ -78,7 +78,7 @@ class PublicationsExtension(private val project: Project) {
         packageGroup = packageGroup ?: project.group.toString()
         project.applyNexusPlugin(settings, packageGroup)
 
-        project.tasks.named("closeRepository") {
+        project.tasks.named("closeAndReleaseStagingRepository") {
             mustRunAfter("publishToSonatype")
         }
     }
@@ -201,7 +201,6 @@ private fun Project.addPublication(settings: ArtifactPublication) {
         }
 
         if (settings.publishToSonatype && sonatypeSettings != null) {
-            thisProject.configureNexusPublish(sonatypeSettings)
             if (thisProject != rootProject) {
                 named("publishToSonatype") {
                     dependsOn(":$thisProjectName:publishToSonatype")
