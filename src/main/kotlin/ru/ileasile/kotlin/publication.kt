@@ -96,6 +96,7 @@ class PublicationsExtension(private val project: Project) {
     fun publication(configuration: Closure<in ArtifactPublication>) {
         val res = ArtifactPublication()
         configuration.delegate = res
+        configuration.resolveStrategy = Closure.DELEGATE_FIRST
         configuration(res)
         publication(res)
     }
