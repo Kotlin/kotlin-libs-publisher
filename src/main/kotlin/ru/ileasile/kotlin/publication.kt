@@ -74,6 +74,8 @@ class PublicationsExtension(private val project: Project) {
 
         val settings = SonatypeSettings(username, password, repositoryDescription)
         _sonatypeSettings = settings
+
+        packageGroup = packageGroup ?: project.group.toString()
         project.applyNexusPlugin(settings, packageGroup)
 
         project.tasks.named("closeRepository") {
