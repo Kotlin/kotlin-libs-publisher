@@ -168,7 +168,7 @@ private fun Project.addPublication(settings: ArtifactPublication) {
                 artifactId = settings.artifactId
                 groupId = settings.groupId ?: getFirstExt { packageGroup }
 
-                artifact(tasks["jar"])
+                from(components["java"])
                 artifact(tasks["sourceJar"])
                 artifact(tasks["javadocJar"])
 
