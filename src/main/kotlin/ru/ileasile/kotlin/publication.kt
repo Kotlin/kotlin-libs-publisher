@@ -20,6 +20,13 @@ import java.nio.file.Path
 
 private typealias PomConfigurator = Action<in MavenPom>
 
+private const val PUBLISHING_GROUP = "publishing"
+
+private const val PUBLISH_TO_SONATYPE_WITH_EXCLUDING_TASK = "publishToSonatypeWithExcluding"
+private const val PUBLISH_TO_SONATYPE_AND_RELEASE_TASK = "publishToSonatypeAndRelease"
+private const val PUBLISH_LOCAL_TASK = "publishLocal"
+private const val CLOSE_AND_RELEASE_TASK = "closeAndReleaseStagingRepository"
+
 data class SigningCredentials(
     val key: String,
     val privateKey: String,
@@ -62,14 +69,18 @@ class PublicationsExtension(private val project: Project) {
     ) {
         project.extra[MAIN_PROJECT_MARK_PROP_NAME] = true
 
-        project.tasks.register("publishLocal") {
-            group = "publishing"
+        project.tasks.register(PUBLISH_LOCAL_TASK) {
+            group = PUBLISHING_GROUP
         }
 
-        project.tasks.register("publishToSonatypeAndRelease") {
-            group = "publishing"
+        project.tasks.register(PUBLISH_TO_SONATYPE_WITH_EXCLUDING_TASK) {
+            group = PUBLISHING_GROUP
+        }
 
-            dependsOn("publishToSonatype", "closeAndReleaseStagingRepository")
+        project.tasks.register(PUBLISH_TO_SONATYPE_AND_RELEASE_TASK) {
+            group = PUBLISHING_GROUP
+
+            dependsOn(PUBLISH_TO_SONATYPE_WITH_EXCLUDING_TASK, CLOSE_AND_RELEASE_TASK)
         }
 
         val settings = SonatypeSettings(username, password, repositoryDescription)
@@ -78,8 +89,8 @@ class PublicationsExtension(private val project: Project) {
         packageGroup = packageGroup ?: project.group.toString()
         project.applyNexusPlugin(settings, packageGroup)
 
-        project.tasks.named("closeAndReleaseStagingRepository") {
-            mustRunAfter("publishToSonatype")
+        project.tasks.named(CLOSE_AND_RELEASE_TASK) {
+            mustRunAfter(PUBLISH_TO_SONATYPE_WITH_EXCLUDING_TASK)
         }
     }
 
@@ -195,16 +206,15 @@ private fun Project.addPublication(settings: ArtifactPublication) {
     val thisProject = project
 
     rootProject.tasks {
-        named("publishLocal") {
-            val projectPrefix = if (thisProject != rootProject) ":$thisProjectName" else ""
+        val projectPrefix = if (thisProject != rootProject) ":$thisProjectName" else ""
+        named(PUBLISH_LOCAL_TASK) {
             dependsOn("$projectPrefix:publishAllPublicationsToLocalBuildRepository")
         }
 
         if (settings.publishToSonatype && sonatypeSettings != null) {
-            if (thisProject != rootProject) {
-                named("publishToSonatype") {
-                    dependsOn(":$thisProjectName:publishToSonatype")
-                }
+            val publishTaskName = "publish${publicationName.capitalize()}PublicationToSonatypeRepository"
+            named(PUBLISH_TO_SONATYPE_WITH_EXCLUDING_TASK) {
+                dependsOn("$projectPrefix:$publishTaskName")
             }
         }
     }
