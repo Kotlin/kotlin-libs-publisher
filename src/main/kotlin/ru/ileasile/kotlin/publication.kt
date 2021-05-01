@@ -193,8 +193,8 @@ private fun Project.addPublication(settings: ArtifactPublication) {
         }
 
         repositories {
-            val localRepoPath = rootProject.findProperty("localPublicationsRepo") as? Path ?:
-                            buildDir.toPath().resolve("artifacts")
+            val localRepoPath = rootProject.findProperty("localPublicationsRepo") as? Path
+                ?: buildDir.toPath().resolve("artifacts")
 
             maven {
                 name = "LocalBuild"
