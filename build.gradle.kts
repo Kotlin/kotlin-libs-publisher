@@ -1,7 +1,8 @@
 plugins {
-    id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
-    id("com.gradle.plugin-publish") version "0.12.0"
     `java-gradle-plugin`
+    //`maven-publish`
+    id("com.gradle.plugin-publish") version "0.15.0"
+    id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
     `kotlin-dsl`
 }
 
@@ -95,3 +96,9 @@ pluginBundle {
         }
     }
 }
+
+//publishing {
+//    repositories {
+//        maven(buildDir.resolve("artifacts/maven").toURI().toURL())
+//    }
+//}
