@@ -1,6 +1,6 @@
 plugins {
     `java-gradle-plugin`
-    //`maven-publish`
+    `maven-publish`
     id("com.gradle.plugin-publish") version "0.15.0"
     id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
     `kotlin-dsl`
@@ -53,6 +53,11 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
 }
 
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
 tasks.test {
     useJUnitPlatform()
     testLogging {
@@ -97,8 +102,8 @@ pluginBundle {
     }
 }
 
-//publishing {
-//    repositories {
-//        maven(buildDir.resolve("artifacts/maven").toURI().toURL())
-//    }
-//}
+publishing {
+    repositories {
+        maven(buildDir.resolve("artifacts/maven").toURI().toURL())
+    }
+}
