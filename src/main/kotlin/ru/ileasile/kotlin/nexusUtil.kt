@@ -25,3 +25,11 @@ fun Project.applyNexusPlugin(settings: SonatypeSettings, packageGroup: String?) 
         }
     }
 }
+
+fun getPublishTaskName(repoName: String, publicationName: String? = null): String {
+    return if (publicationName == null) {
+        "publishAllPublicationsTo${repoName.capitalize()}Repository"
+    } else {
+        "publish${publicationName.capitalize()}PublicationTo${repoName.capitalize()}Repository"
+    }
+}

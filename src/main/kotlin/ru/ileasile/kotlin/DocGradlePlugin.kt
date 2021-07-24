@@ -32,7 +32,7 @@ class DocGradlePlugin : Plugin<Project> {
         }
 
         tasks.register<PublishDocsTask>("publishDocs") {
-            group = "publishing"
+            group = PUBLISHING_GROUP
             dependsOn(dokkaTask)
 
             doLast {

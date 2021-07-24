@@ -33,7 +33,6 @@ val detectVersionForTC by tasks.registering {
 val junitVersion: String by project
 
 repositories {
-    jcenter()
     mavenCentral()
     gradlePluginPortal()
 }
@@ -41,6 +40,7 @@ repositories {
 dependencies {
     implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.4.30")
     implementation("io.github.gradle-nexus:publish-plugin:1.0.0")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.31")
 
     // For maven-publish
     implementation(gradleApi())
@@ -56,6 +56,11 @@ dependencies {
 java {
     withSourcesJar()
     withJavadocJar()
+}
+
+tasks.withType<JavaCompile> {
+    sourceCompatibility = JavaVersion.VERSION_1_8.toString()
+    targetCompatibility = JavaVersion.VERSION_1_8.toString()
 }
 
 tasks.test {
@@ -91,13 +96,13 @@ pluginBundle {
         publishingPlugin {
             displayName = "Kotlin libs publisher plugin"
             description = displayName
-            tags = listOf("kotlin")
+            tags = listOf("kotlin", "publishing")
         }
 
         docPlugin {
             displayName = "Kotlin libs documenting plugin"
             description = displayName
-            tags = listOf("kotlin")
+            tags = listOf("kotlin", "documentation")
         }
     }
 }
