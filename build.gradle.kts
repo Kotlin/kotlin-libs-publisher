@@ -49,6 +49,7 @@ dependencies {
     testImplementation(kotlin("test"))
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testImplementation("io.kotlintest:kotlintest-assertions:3.4.2")
+    testImplementation(gradleTestKit())
 
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
 }

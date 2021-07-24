@@ -10,13 +10,14 @@ import org.jetbrains.dokka.gradle.DokkaMultiModuleTask
 import org.jetbrains.dokka.gradle.DokkaPlugin
 import java.io.OutputStream
 
+@Suppress("unused")
 class DocGradlePlugin : Plugin<Project> {
     override fun apply(target: Project): Unit = with(target) {
         pluginManager.run {
             apply(DokkaPlugin::class.java)
         }
 
-        val dokkaTask = tasks.named<DokkaMultiModuleTask>("dokkaHtmlMultiModule").get()
+        val dokkaTask = tasks.named<DokkaMultiModuleTask>(DOKKA_HTML_MULTI_MODULE_TASK).get()
         val dokkaOutput = dokkaTask.outputDirectory.get()
         val docRepoDir = buildDir.resolve("docRepo").absoluteFile
         docRepoDir.deleteRecursively()
@@ -65,5 +66,9 @@ class DocGradlePlugin : Plugin<Project> {
                 }
             }
         }
+    }
+
+    companion object {
+        private const val DOKKA_HTML_MULTI_MODULE_TASK = "dokkaHtmlMultiModule"
     }
 }

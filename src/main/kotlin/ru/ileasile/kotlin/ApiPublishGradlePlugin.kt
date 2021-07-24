@@ -6,6 +6,7 @@ import org.gradle.api.publish.maven.plugins.MavenPublishPlugin
 import org.gradle.plugins.signing.SigningPlugin
 import org.jetbrains.dokka.gradle.DokkaPlugin
 
+@Suppress("unused")
 class ApiPublishGradlePlugin : Plugin<Project> {
     override fun apply(target: Project) {
         target.pluginManager.run {
