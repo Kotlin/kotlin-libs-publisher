@@ -4,6 +4,7 @@ import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.api.provider.Property
 import org.gradle.api.publish.maven.MavenPom
+import java.util.BitSet
 
 internal const val PUBLISHING_GROUP = "publishing"
 internal typealias PomConfigurator = Action<in MavenPom>
@@ -22,6 +23,28 @@ internal fun <T : Any> Project.getClosestProperty(getter: PublicationsExtension.
 
 internal fun <T : Any> Project.getClosestDefinedProperty(getter: PublicationsExtension.() -> Property<T>): T? {
     return thisWithParents().mapNotNull { it.getPublicationsExtension()?.getter() }.firstOrNull { it.isPresent }?.orNull
+}
+
+internal fun Project.afterAllParentsEvaluate(action: () -> Unit) {
+    val projects = thisWithParents().toList()
+    val projectsCount = projects.size
+    val evaluated = BitSet(projectsCount)
+
+    projects.forEachIndexed { i, project ->
+        fun applyAction() {
+            evaluated.set(i)
+            if (evaluated.cardinality() == projectsCount) {
+                action()
+            }
+        }
+        if (project.state.executed) {
+            applyAction()
+        } else {
+            project.afterEvaluate {
+                applyAction()
+            }
+        }
+    }
 }
 
 internal fun getPublishTaskName(repoName: String, publicationName: String? = null): String {

@@ -57,7 +57,7 @@ class PublicationsExtension(private val project: Project) {
         if (project === project.rootProject) {
             registerAsRootProject()
         }
-        project.afterEvaluate {
+        project.afterAllParentsEvaluate {
             bindPublications()
         }
     }
@@ -119,7 +119,7 @@ class PublicationsExtension(private val project: Project) {
      */
     @Suppress("MemberVisibilityCanBePrivate")
     fun publication(publication: ArtifactPublication) {
-        project.afterEvaluate {
+        project.afterAllParentsEvaluate {
             addPublication(publication)
         }
     }
@@ -315,7 +315,7 @@ class PublicationsExtension(private val project: Project) {
             }
         }
 
-        project.afterEvaluate {
+        project.afterAllParentsEvaluate {
             configureNexusPublishingTasks()
         }
     }
