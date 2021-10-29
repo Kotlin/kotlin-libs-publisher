@@ -54,3 +54,7 @@ internal fun getPublishTaskName(repoName: String, publicationName: String? = nul
         "publish${publicationName.capitalize()}PublicationTo${repoName.capitalize()}Repository"
     }
 }
+
+internal val Project.defaultGroup: String get() {
+    return project.getClosestDefinedProperty { defaultGroup } ?: project.group.toString()
+}

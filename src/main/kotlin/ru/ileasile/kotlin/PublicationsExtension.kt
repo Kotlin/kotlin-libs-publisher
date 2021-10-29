@@ -153,6 +153,16 @@ class PublicationsExtension(private val project: Project) {
     }
 
     /**
+     * Configure repositories publishing to that will be bound to [PUBLISH_LOCAL_TASK] task
+     */
+    @Suppress("unused")
+    fun localRepositories(configure: Closure<in RepositoryHandler>) {
+        _repositoryConfigurators.add {
+            project.configure(this as Any, configure)
+        }
+    }
+
+    /**
      * Adds Maven repository with specified [name] and local [path]
      */
     @Suppress("MemberVisibilityCanBePrivate")

@@ -1,0 +1,24 @@
+plugins {
+    id("ru.ileasile.kotlin.publisher")
+    id("org.jetbrains.kotlin.jvm") version "%KOTLIN_VERSION%"
+}
+
+%GROUP_VERSION%
+
+repositories {
+    mavenCentral()
+}
+
+kotlinPublications {
+    publication {
+        publicationName.set("groovy-pub")
+        artifactId.set("pub-dev-groovy")
+        description.set("Sample library Groovy publication")
+    }
+
+    localRepositories {
+        maven {
+            url = project.file(new File(buildDir, "artifacts/maven")).toURI()
+        }
+    }
+}

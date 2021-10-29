@@ -1,7 +1,7 @@
 plugins {
     `java-gradle-plugin`
-    `maven-publish`
     id("com.gradle.plugin-publish") version "0.15.0"
+    id("ru.ileasile.kotlin.publisher") version "0.0.59-dev"
     id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
     `kotlin-dsl`
 }
@@ -38,8 +38,8 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.5.0")
-    implementation("io.github.gradle-nexus:publish-plugin:1.0.0")
+    implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.5.31")
+    implementation("io.github.gradle-nexus:publish-plugin:1.1.0")
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.31")
 
     // For maven-publish
@@ -108,8 +108,8 @@ pluginBundle {
     }
 }
 
-publishing {
-    repositories {
-        maven(buildDir.resolve("artifacts/maven").toURI().toURL())
+kotlinPublications {
+    localRepositories {
+        defaultLocalMavenRepository()
     }
 }

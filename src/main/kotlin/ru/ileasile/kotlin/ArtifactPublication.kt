@@ -12,7 +12,7 @@ class ArtifactPublication(project: Project) {
         set(project.provider { project.getClosestDefinedProperty { defaultArtifactIdPrefix }.orEmpty() + publicationName.get() })
     }
     val groupId: Property<String> = project.objects.property<String>().apply {
-        set(project.provider { project.getClosestDefinedProperty { defaultGroup }!! })
+        set(project.provider { project.defaultGroup })
     }
     val packageName: Property<String> = project.objects.property<String>().apply {
         set(artifactId)
