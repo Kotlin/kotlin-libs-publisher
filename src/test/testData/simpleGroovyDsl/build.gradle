@@ -18,7 +18,7 @@ kotlinPublications {
 
     localRepositories {
         maven {
-            url = project.file(new File(buildDir, "artifacts/maven")).toURI()
+            url = project.file(new File(buildDir, "%LOCAL_PUBLISH_REPO%")).toURI()
         }
     }
 }

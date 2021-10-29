@@ -1,5 +1,7 @@
 package ru.ileasile.kotlin
 
+import io.kotlintest.matchers.collections.shouldHaveSize
+import io.kotlintest.shouldBe
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.jupiter.api.Test
 import java.io.File
@@ -9,22 +11,34 @@ class IntegrationTest {
 
     @Test
     fun `test publishLocal in simple project with Kotlin DSL`() = doTaskTest("simpleKotlinDsl", PUBLISH_LOCAL_TASK) {
-        val artifactId = "pub-dev"
         buildDir.shouldContainAllFiles(
-            jarArtifact(artifactId),
-            sourcesArtifact(artifactId),
-            javadocArtifact(artifactId),
+            pathsFactory.allArchives("pub-dev")
         )
     }
 
     @Test
     fun `test publishLocal in simple project with Groovy DSL`() = doTaskTest("simpleGroovyDsl", PUBLISH_LOCAL_TASK) {
-        val artifactId = "pub-dev-groovy"
         buildDir.shouldContainAllFiles(
-            jarArtifact(artifactId),
-            sourcesArtifact(artifactId),
-            javadocArtifact(artifactId),
+            pathsFactory.allArchives("pub-dev-groovy")
         )
+    }
+
+    @Test
+    fun `check POM modification like in kernel`() = doTaskTest("kernelLikePublication", PUBLISH_LOCAL_TASK) {
+        val artifactId = "kotlin-jupyter-kernel"
+        val customPaths = pathsFactory.withGroup("org.jetbrains.kotlinx")
+
+        buildDir.shouldContainAllFiles(
+            customPaths.allArchives(artifactId)
+        )
+
+        with(buildDir.resolve(customPaths.pom(artifactId)).parsePom()) {
+            licenses.single().apply {
+                name shouldBe "The Apache Software License, Version 2.0"
+            }
+            developers.shouldHaveSize(2)
+            version shouldBe options.scriptOptions.version
+        }
     }
 
     private fun doTaskTest(testName: String, taskName: String, checker: BuildResultChecker) = doTest(
@@ -35,14 +49,8 @@ class IntegrationTest {
         )
     )
 
-    private class TestOptions(
-        val testDir: String,
-        val cmdLine: List<String>,
-        val checker: BuildResultChecker = {},
-    )
-
     private fun doTest(options: TestOptions) {
-        underTempDir(TEST_DATA_DIR.resolve(options.testDir)) { projectDir ->
+        underTempDir(options, TEST_DATA_DIR.resolve(options.testDir)) { projectDir ->
             val buildResult = GradleRunner.create()
                 .withProjectDir(projectDir)
                 .withPluginClasspath()
@@ -50,40 +58,51 @@ class IntegrationTest {
                 .forwardOutput()
                 .build()
 
+            val pathsFactory = TestPathsFactory(options.scriptOptions)
+
             options.checker(
                 BuildResultEx(
                     buildResult,
                     projectDir.resolve("build"),
+                    pathsFactory,
+                    options,
                 )
             )
         }
     }
 
-    private fun <T> underTempDir(dir: File, action: (File) -> T): T {
+    private fun <T> underTempDir(options: TestOptions, dir: File, action: (File) -> T): T {
         val tempDir = Files.createTempDirectory("kotlin-libs-publisher-test-project").toFile()
         tempDir.deleteRecursively()
 
         for (src in dir.walkTopDown()) {
             val relPath = src.toRelativeString(dir)
             val dest = File(tempDir, relPath)
-            copyFile(src, dest)
+            if (src.isDirectory) dest.mkdirs()
+            else {
+                PlaceholderReplacer(options.scriptOptions, src).copyWithReplacingTo(dest)
+            }
         }
+        if (options.withSimpleSources) {
+            createSimpleSources(tempDir)
+        }
+
         val result = action(tempDir)
 
         tempDir.deleteRecursively()
         return result
     }
 
-    private fun copyFile(src: File, dest: File) {
-        if (src.isDirectory) dest.mkdirs()
-        else {
-            val text = src.readText()
-            val replacedText = placeholders.entries.fold(text) { acc, (placeholder, replacer) ->
-                val replacement = replacer(src)
-                if (replacement == null) text
-                else acc.replace(placeholder, replacement)
-            }
-            dest.writeText(replacedText)
+    private fun createSimpleSources(dest: File) {
+        dest.walkTopDown().filter { it.isGradleScript }.forEachIndexed { counter, scriptFile ->
+            val ktClassFile = scriptFile.parentFile.resolve("src/kotlin/main/my$counter/MyClass$counter.kt")
+            ktClassFile.parentFile.mkdirs()
+            ktClassFile.writeText(
+                """
+                package my$counter
+                class MyClass$counter(val x: Int = 5)
+                """.trimIndent()
+            )
         }
     }
 
@@ -95,39 +114,5 @@ class IntegrationTest {
             "--stacktrace",
             "--info"
         )
-
-        private const val DEFAULT_LOCAL_MAVEN_REPO_FOLDER = "artifacts/maven"
-        private const val DEFAULT_TEST_GROUP = "ru.ileasile.samples"
-        private const val DEFAULT_TEST_VERSION = "0.0.1"
-        private const val DEFAULT_KOTLIN_VERSION = "1.5.31"
-
-        private val placeholders: Map<String, (File) -> String?> = mapOf(
-            "%GROUP_VERSION%" to {
-                it.takeIfGradleScript {
-                    """
-                        group = "$DEFAULT_TEST_GROUP"
-                        version = "$DEFAULT_TEST_VERSION"
-                    """.trimIndent()
-                }
-            },
-            "%KOTLIN_VERSION%" to {
-                it.takeIfGradleScript {
-                    DEFAULT_KOTLIN_VERSION
-                }
-            },
-        )
-
-        private fun artifact(artifactId: String, classifier: String, extension: String): String {
-            return buildString {
-                append("$DEFAULT_LOCAL_MAVEN_REPO_FOLDER/${DEFAULT_TEST_GROUP.replace(".", "/")}/")
-                append("$artifactId/$DEFAULT_TEST_VERSION/$artifactId-$DEFAULT_TEST_VERSION")
-                if (classifier.isNotEmpty()) append("-$classifier")
-                append(".$extension")
-            }
-        }
-
-        private fun jarArtifact(artifactId: String) = artifact(artifactId, "", "jar")
-        private fun sourcesArtifact(artifactId: String) = artifact(artifactId, "sources", "jar")
-        private fun javadocArtifact(artifactId: String) = artifact(artifactId, "javadoc", "jar")
     }
 }
