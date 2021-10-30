@@ -115,6 +115,7 @@ class TestPathsFactory(
     private val options: BuildScriptOptions,
 ) {
     fun withGroup(group: String) = TestPathsFactory(options.copy(group = group))
+    fun withVersion(version: String) = TestPathsFactory(options.copy(version = version))
 
     fun artifact(artifactId: String, classifier: String, extension: String): String {
         return buildString {

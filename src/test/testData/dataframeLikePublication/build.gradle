@@ -1,0 +1,37 @@
+plugins {
+    id("ru.ileasile.kotlin.publisher")
+    id("org.jetbrains.kotlin.jvm") version "%KOTLIN_VERSION%"
+}
+
+%GROUP_VERSION%
+
+repositories {
+    mavenCentral()
+}
+
+kotlinPublications {
+    pom {
+        use(ru.ileasile.kotlin.PomUtilKt) {
+            githubRepo("Kotlin", "dataframe")
+            inceptionYear.set("2021")
+            licenses {
+                apache2()
+            }
+            developers {
+                developer("nikitinas", "Anatoly Nikitin", "Anatoly.Nikitin@jetbrains.com")
+            }
+        }
+    }
+
+    publication {
+        publicationName.set("api")
+        artifactId.set("dataframe")
+        description.set("Data processing in Kotlin")
+    }
+
+    localRepositories {
+        maven {
+            url = project.file(new File(buildDir, "%LOCAL_PUBLISH_REPO%")).toURI()
+        }
+    }
+}

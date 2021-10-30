@@ -41,6 +41,24 @@ class IntegrationTest {
         }
     }
 
+    @Test
+    fun `check dataframe-like publication that uses KSP`() = doTaskTest("dataframeLikePublication", PUBLISH_LOCAL_TASK) {
+        val dfArtifact = "dataframe"
+        val procArtifact = "symbol-processor"
+        val procPaths = pathsFactory.withGroup("org.jetbrains.kotlinx.dataframe").withVersion("0.0.2")
+
+        buildDir.shouldContainAllFiles(
+            pathsFactory.allArchives(dfArtifact) + procPaths.allArchives(procArtifact)
+        )
+
+        with(buildDir.resolve(pathsFactory.pom(dfArtifact)).parsePom()) {
+            developers.shouldHaveSize(1)
+            version shouldBe options.scriptOptions.version
+            inceptionYear shouldBe "2021"
+            description shouldBe "Data processing in Kotlin"
+        }
+    }
+
     private fun doTaskTest(testName: String, taskName: String, checker: BuildResultChecker) = doTest(
         TestOptions(
             testName,
