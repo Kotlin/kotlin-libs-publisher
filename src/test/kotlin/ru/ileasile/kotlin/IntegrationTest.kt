@@ -112,7 +112,7 @@ class IntegrationTest {
     }
 
     private fun createSimpleSources(dest: File) {
-        dest.walkTopDown().filter { it.isGradleScript }.forEachIndexed { counter, scriptFile ->
+        dest.walkTopDown().filter { it.isGradleFile }.forEachIndexed { counter, scriptFile ->
             val ktClassFile = scriptFile.parentFile.resolve("src/kotlin/main/my$counter/MyClass$counter.kt")
             ktClassFile.parentFile.mkdirs()
             ktClassFile.writeText(

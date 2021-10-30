@@ -52,12 +52,12 @@ fun containAllFiles(vararg names: String) = object : Matcher<File> {
     }
 }
 
-val File.isGradleScript: Boolean get() {
-    return isFile && name.contains(".gradle")
+val File.isGradleFile: Boolean get() {
+    return isFile && (name.contains(".gradle") || name == "gradle.properties")
 }
 
 fun <T> File.takeIfGradleScript(action: () -> T): T? {
-    return if (isGradleScript) action() else null
+    return if (isGradleFile) action() else null
 }
 
 fun File.parsePom(): Model {
