@@ -6,7 +6,7 @@ import org.gradle.kotlin.dsl.named
 import org.gradle.kotlin.dsl.register
 import org.gradle.process.ExecResult
 import org.gradle.process.ExecSpec
-import org.jetbrains.dokka.gradle.DokkaMultiModuleTask
+import org.jetbrains.dokka.gradle.AbstractDokkaTask
 import org.jetbrains.dokka.gradle.DokkaPlugin
 import java.io.OutputStream
 
@@ -17,7 +17,8 @@ class DocGradlePlugin : Plugin<Project> {
             apply(DokkaPlugin::class.java)
         }
 
-        val dokkaTask = tasks.named<DokkaMultiModuleTask>(DOKKA_HTML_MULTI_MODULE_TASK).get()
+        val dokkaTaskName = if (subprojects.isEmpty()) DOKKA_HTML_TASK else DOKKA_HTML_MULTI_MODULE_TASK
+        val dokkaTask = tasks.named<AbstractDokkaTask>(dokkaTaskName).get()
         val dokkaOutput = dokkaTask.outputDirectory.get()
         val docRepoDir = buildDir.resolve("docRepo").absoluteFile
         docRepoDir.deleteRecursively()
@@ -69,6 +70,7 @@ class DocGradlePlugin : Plugin<Project> {
     }
 
     companion object {
+        private const val DOKKA_HTML_TASK = "dokkaHtml"
         private const val DOKKA_HTML_MULTI_MODULE_TASK = "dokkaHtmlMultiModule"
     }
 }
