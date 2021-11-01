@@ -3,9 +3,11 @@ package org.jetbrains.kotlinx.publisher
 import org.gradle.api.DefaultTask
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Internal
 import org.gradle.kotlin.dsl.property
 
 abstract class PublishDocsTask : DefaultTask() {
+    @Internal
     override fun getDescription() = "Publishes Dokka HTML output to git repository ${docsRepoUrl.get()}, branch ${branchName.get()}"
 
     @Input
