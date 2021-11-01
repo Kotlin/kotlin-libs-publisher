@@ -1,5 +1,5 @@
 plugins {
-    id("org.jetbrains.kotlin.libs.publisher")
+    kotlin("libs.publisher")
     kotlin("jvm") version "%KOTLIN_VERSION%"
 }
 

@@ -1,7 +1,7 @@
 plugins {
     `java-gradle-plugin`
     id("com.gradle.plugin-publish") version "0.15.0"
-    id("ru.ileasile.kotlin.publisher") version "0.0.59-dev"
+    kotlin("libs.publisher") version "0.0.60-dev-29"
     id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
     `kotlin-dsl`
 }

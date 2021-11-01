@@ -3,7 +3,7 @@ import org.jetbrains.kotlinx.publisher.developer
 import org.jetbrains.kotlinx.publisher.githubRepo
 
 plugins {
-    id("org.jetbrains.kotlin.libs.publisher")
+    kotlin("libs.publisher")
     kotlin("jvm") version "%KOTLIN_VERSION%"
 }
 
