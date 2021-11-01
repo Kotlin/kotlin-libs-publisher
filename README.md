@@ -16,12 +16,12 @@ Note that it's better to specify plugin version `settings.gradle[.kts]` or via v
 Kotlin DSL:
 
 ```kotlin
-import ru.ileasile.kotlin.apache2
-import ru.ileasile.kotlin.developer
-import ru.ileasile.kotlin.githubRepo
+import org.jetbrains.kotlinx.publisher.apache2
+import org.jetbrains.kotlinx.publisher.developer
+import org.jetbrains.kotlinx.publisher.githubRepo
 
 plugins {
-    id("ru.ileasile.kotlin.publisher")
+    id("org.jetbrains.kotlin.libs.publisher")
 }
 
 kotlinPublications {
@@ -86,7 +86,7 @@ Groovy DSL:
 
 ```groovy
 plugins {
-    id("ru.ileasile.kotlin.publisher")
+    id("org.jetbrains.kotlin.libs.publisher")
 }
 
 kotlinPublications {
@@ -114,7 +114,7 @@ kotlinPublications {
     )
 
     pom {
-        use(ru.ileasile.kotlin.PomUtilKt) {
+        use(org.jetbrains.kotlinx.publisher.PomUtilKt) {
             // Use this convenience extension to setup all needed URLs
             // for the POM in case you're using GitHub
             githubRepo("github_user", "github_repo")
@@ -179,7 +179,7 @@ Setup is the same for Kotlin and Groovy DSL:
 
 ```kotlin
 plugins {
-    id("ru.ileasile.kotlin.doc")
+    id("org.jetbrains.kotlin.libs.doc")
 }
 
 tasks.publishDocs {

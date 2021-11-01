@@ -1,4 +1,4 @@
-package ru.ileasile.kotlin
+package org.jetbrains.kotlinx.publisher
 
 import groovy.lang.Closure
 import io.github.gradlenexus.publishplugin.NexusPublishExtension

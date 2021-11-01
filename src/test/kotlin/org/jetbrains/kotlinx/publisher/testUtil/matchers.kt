@@ -1,4 +1,4 @@
-package ru.ileasile.kotlin.testUtil
+package org.jetbrains.kotlinx.publisher.testUtil
 
 import io.kotlintest.Matcher
 import io.kotlintest.MatcherResult

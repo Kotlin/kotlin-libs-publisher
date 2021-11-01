@@ -1,9 +1,9 @@
-import ru.ileasile.kotlin.apache2
-import ru.ileasile.kotlin.developer
-import ru.ileasile.kotlin.githubRepo
+import org.jetbrains.kotlinx.publisher.apache2
+import org.jetbrains.kotlinx.publisher.developer
+import org.jetbrains.kotlinx.publisher.githubRepo
 
 plugins {
-    id("ru.ileasile.kotlin.publisher")
+    id("org.jetbrains.kotlin.libs.publisher")
     kotlin("jvm") version "%KOTLIN_VERSION%"
 }
 

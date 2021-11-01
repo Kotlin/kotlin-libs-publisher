@@ -1,5 +1,5 @@
 plugins {
-    id("ru.ileasile.kotlin.doc")
+    id("org.jetbrains.kotlin.libs.doc")
     kotlin("jvm") version "%KOTLIN_VERSION%"
 }
 

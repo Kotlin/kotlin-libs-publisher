@@ -1,5 +1,5 @@
 plugins {
-    id("ru.ileasile.kotlin.publisher")
+    id("org.jetbrains.kotlin.libs.publisher")
     id("org.jetbrains.kotlin.jvm") version "%KOTLIN_VERSION%"
 }
 

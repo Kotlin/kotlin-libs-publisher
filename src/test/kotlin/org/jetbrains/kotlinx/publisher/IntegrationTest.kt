@@ -1,13 +1,13 @@
-package ru.ileasile.kotlin
+package org.jetbrains.kotlinx.publisher
 
 import io.kotlintest.matchers.collections.shouldHaveSize
 import io.kotlintest.matchers.string.shouldContain
 import io.kotlintest.shouldBe
+import org.jetbrains.kotlinx.publisher.testUtil.parsePom
+import org.jetbrains.kotlinx.publisher.testUtil.shouldContainAllFiles
+import org.jetbrains.kotlinx.publisher.testUtil.testPublishLocal
+import org.jetbrains.kotlinx.publisher.testUtil.testTasks
 import org.junit.jupiter.api.Test
-import ru.ileasile.kotlin.testUtil.parsePom
-import ru.ileasile.kotlin.testUtil.shouldContainAllFiles
-import ru.ileasile.kotlin.testUtil.testPublishLocal
-import ru.ileasile.kotlin.testUtil.testTasks
 
 class IntegrationTest {
 

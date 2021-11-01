@@ -1,4 +1,4 @@
-package ru.ileasile.kotlin
+package org.jetbrains.kotlinx.publisher
 
 import org.gradle.api.Project
 import org.gradle.api.provider.Property

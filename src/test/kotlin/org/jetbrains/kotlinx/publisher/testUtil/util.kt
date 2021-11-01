@@ -1,4 +1,4 @@
-package ru.ileasile.kotlin.testUtil
+package org.jetbrains.kotlinx.publisher.testUtil
 
 import org.gradle.internal.impldep.org.apache.maven.model.Model
 import org.gradle.internal.impldep.org.apache.maven.model.io.xpp3.MavenXpp3Reader

@@ -6,7 +6,7 @@ plugins {
     `kotlin-dsl`
 }
 
-group = "ru.ileasile"
+group = "org.jetbrains.kotlin"
 version = detectVersion()
 
 fun detectVersion(): String {
@@ -78,12 +78,12 @@ val docPlugin = "doc"
 gradlePlugin {
     plugins {
         create(publishingPlugin) {
-            id = "ru.ileasile.kotlin.publisher"
-            implementationClass = "ru.ileasile.kotlin.ApiPublishGradlePlugin"
+            id = "org.jetbrains.kotlin.libs.publisher"
+            implementationClass = "org.jetbrains.kotlinx.publisher.ApiPublishGradlePlugin"
         }
         create(docPlugin) {
-            id = "ru.ileasile.kotlin.doc"
-            implementationClass = "ru.ileasile.kotlin.DocGradlePlugin"
+            id = "org.jetbrains.kotlin.libs.doc"
+            implementationClass = "org.jetbrains.kotlinx.publisher.DocGradlePlugin"
         }
     }
 }

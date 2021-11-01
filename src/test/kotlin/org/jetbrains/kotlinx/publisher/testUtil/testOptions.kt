@@ -1,4 +1,4 @@
-package ru.ileasile.kotlin.testUtil
+package org.jetbrains.kotlinx.publisher.testUtil
 
 import org.gradle.testkit.runner.BuildResult
 import java.io.File
@@ -21,7 +21,7 @@ class BuildResultEx(
 )
 
 data class BuildScriptOptions(
-    val group: String = "ru.ileasile.samples",
+    val group: String = "kotlin.publisher.samples",
     val version: String = "0.0.1",
     val kotlinVersion: String = "1.5.31",
     val localPublishRepo: String = "artifacts/maven",
