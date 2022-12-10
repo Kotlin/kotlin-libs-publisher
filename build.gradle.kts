@@ -38,9 +38,9 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.5.31")
+    implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.7.20")
     implementation("io.github.gradle-nexus:publish-plugin:1.1.0")
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.31")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20")
 
     // For maven-publish
     implementation(gradleApi())
