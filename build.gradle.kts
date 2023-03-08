@@ -1,7 +1,7 @@
 plugins {
     `java-gradle-plugin`
-    id("com.gradle.plugin-publish") version "0.15.0"
-    kotlin("libs.publisher") version "0.0.60-dev-29"
+    id("com.gradle.plugin-publish") version "0.21.0"
+    kotlin("libs.publisher") version "0.0.61-dev-33"
     id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
     `kotlin-dsl`
 }
@@ -38,9 +38,9 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.7.20")
+    implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.8.10")
     implementation("io.github.gradle-nexus:publish-plugin:1.1.0")
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.10")
 
     // For maven-publish
     implementation(gradleApi())
@@ -72,38 +72,38 @@ tasks.test {
     outputs.upToDateWhen { false }
 }
 
+tasks.runKtlintCheckOverMainSourceSet {
+    dependsOn(tasks.runKtlintCheckOverKotlinScripts)
+}
+
+tasks.runKtlintFormatOverMainSourceSet {
+    dependsOn(tasks.runKtlintFormatOverKotlinScripts)
+}
+
+tasks.runKtlintFormatOverTestSourceSet {
+    dependsOn(tasks.runKtlintFormatOverKotlinScripts)
+}
+
 val publishingPlugin = "publishing"
 val docPlugin = "doc"
 
 gradlePlugin {
+    website.set("https://github.com/Kotlin/kotlin-libs-publisher")
+    vcsUrl.set(website.get())
     plugins {
         create(publishingPlugin) {
             id = "org.jetbrains.kotlin.libs.publisher"
             implementationClass = "org.jetbrains.kotlinx.publisher.ApiPublishGradlePlugin"
+            displayName = "Kotlin libs publisher plugin"
+            description = displayName
+            tags.set(listOf("kotlin", "publishing"))
         }
         create(docPlugin) {
             id = "org.jetbrains.kotlin.libs.doc"
             implementationClass = "org.jetbrains.kotlinx.publisher.DocGradlePlugin"
-        }
-    }
-}
-
-pluginBundle {
-    // These settings are set for the whole plugin bundle
-    website = "https://github.com/Kotlin/kotlin-libs-publisher"
-    vcsUrl = website
-
-    (plugins) {
-        publishingPlugin {
-            displayName = "Kotlin libs publisher plugin"
-            description = displayName
-            tags = listOf("kotlin", "publishing")
-        }
-
-        docPlugin {
             displayName = "Kotlin libs documenting plugin"
             description = displayName
-            tags = listOf("kotlin", "documentation")
+            tags.set(listOf("kotlin", "documentation"))
         }
     }
 }
