@@ -91,6 +91,7 @@ tasks.runKtlintFormatOverTestSourceSet {
 val publishingPlugin = "publishing"
 val docPlugin = "doc"
 
+@Suppress("UnstableApiUsage")
 gradlePlugin {
     website.set("https://github.com/Kotlin/kotlin-libs-publisher")
     vcsUrl.set(website.get())
