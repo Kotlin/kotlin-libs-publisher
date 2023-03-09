@@ -113,6 +113,12 @@ gradlePlugin {
     }
 }
 
+pluginBundle {
+    // These settings are set for the whole plugin bundle
+    website = "https://github.com/Kotlin/kotlin-libs-publisher"
+    vcsUrl = website
+}
+
 kotlinPublications {
     localRepositories {
         defaultLocalMavenRepository()
