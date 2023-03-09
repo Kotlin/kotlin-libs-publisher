@@ -122,6 +122,6 @@ kotlinPublications {
 tasks.whenTaskAdded {
     val task = this
     if (task.name == "generateMetadataFileForPluginMavenPublication") {
-        task.dependsOn(":publishPluginJar")
+        task.mustRunAfter(":publishPluginJar", ":publishPluginJavaDocsJar")
     }
 }
