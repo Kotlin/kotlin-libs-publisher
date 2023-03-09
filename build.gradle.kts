@@ -99,16 +99,10 @@ gradlePlugin {
         create(publishingPlugin) {
             id = "org.jetbrains.kotlin.libs.publisher"
             implementationClass = "org.jetbrains.kotlinx.publisher.ApiPublishGradlePlugin"
-            displayName = "Kotlin libs publisher plugin"
-            description = displayName
-            tags.set(listOf("kotlin", "publishing"))
         }
         create(docPlugin) {
             id = "org.jetbrains.kotlin.libs.doc"
             implementationClass = "org.jetbrains.kotlinx.publisher.DocGradlePlugin"
-            displayName = "Kotlin libs documenting plugin"
-            description = displayName
-            tags.set(listOf("kotlin", "documentation"))
         }
     }
 }
@@ -117,6 +111,20 @@ pluginBundle {
     // These settings are set for the whole plugin bundle
     website = "https://github.com/Kotlin/kotlin-libs-publisher"
     vcsUrl = website
+
+    (plugins) {
+        publishingPlugin {
+            displayName = "Kotlin libs publisher plugin"
+            description = displayName
+            tags = listOf("kotlin", "publishing")
+        }
+
+        docPlugin {
+            displayName = "Kotlin libs documenting plugin"
+            description = displayName
+            tags = listOf("kotlin", "documentation")
+        }
+    }
 }
 
 kotlinPublications {
