@@ -26,7 +26,7 @@ class ArtifactPublication(project: Project) {
         set(true)
     }
 
-    private var _artifactConfigureAction : ArtifactConfigurator.() -> Unit = {
+    private var _artifactConfigureAction: ArtifactConfigurator.() -> Unit = {
         from(project.components["java"])
     }
 
