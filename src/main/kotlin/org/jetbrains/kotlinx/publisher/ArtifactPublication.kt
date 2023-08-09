@@ -2,6 +2,8 @@ package org.jetbrains.kotlinx.publisher
 
 import org.gradle.api.Project
 import org.gradle.api.provider.Property
+import org.gradle.api.publish.maven.MavenPublication
+import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.property
 
 class ArtifactPublication(project: Project) {
@@ -22,5 +24,25 @@ class ArtifactPublication(project: Project) {
     }
     val publishToSonatype: Property<Boolean> = project.objects.property<Boolean>().apply {
         set(true)
+    }
+
+    private var _artifactConfigureAction : ArtifactConfigurator.() -> Unit = {
+        from(project.components["java"])
+    }
+
+    fun composeOf(action: ArtifactConfigurator.() -> Unit) {
+        _artifactConfigureAction = action
+    }
+
+    internal fun configurePublication(publication: MavenPublication) {
+        publication.artifactId = artifactId.get()
+        publication.groupId = groupId.get()
+
+        ArtifactConfigurator(publication)._artifactConfigureAction()
+
+        publication.pom {
+            name.set(packageName)
+            description.set(this@ArtifactPublication.description)
+        }
     }
 }

@@ -264,15 +264,8 @@ class PublicationsExtension(private val project: Project) {
         project.extensions.configure<PublishingExtension> {
             publications {
                 register(publicationName, MavenPublication::class.java) {
-                    artifactId = publication.artifactId.get()
-                    groupId = publication.groupId.get()
-
-                    from(project.components["java"])
-
+                    publication.configurePublication(this)
                     pom {
-                        name.set(publication.packageName)
-                        description.set(publication.description)
-
                         applyPomConfigurators(this)
                     }
                 }
@@ -293,7 +286,6 @@ class PublicationsExtension(private val project: Project) {
             project.extensions.configure<SigningExtension> {
                 sign(project.extensions.getByType<PublishingExtension>().publications[publicationName])
 
-                @Suppress("UnstableApiUsage")
                 useInMemoryPgpKeys(key, privateKey, keyPassphrase)
             }
         }
