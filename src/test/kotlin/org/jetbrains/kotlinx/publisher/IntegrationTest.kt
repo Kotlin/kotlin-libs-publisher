@@ -1,8 +1,8 @@
 package org.jetbrains.kotlinx.publisher
 
-import io.kotlintest.matchers.collections.shouldHaveSize
-import io.kotlintest.matchers.string.shouldContain
-import io.kotlintest.shouldBe
+import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldContain
 import org.jetbrains.kotlinx.publisher.testUtil.parsePom
 import org.jetbrains.kotlinx.publisher.testUtil.shouldContainAllFiles
 import org.jetbrains.kotlinx.publisher.testUtil.testPublishLocal

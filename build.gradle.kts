@@ -38,9 +38,9 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.8.20")
+    implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.9.20")
     implementation("io.github.gradle-nexus:publish-plugin:1.1.0")
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.20")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.20")
 
     // For maven-publish
     implementation(gradleApi())
@@ -48,7 +48,7 @@ dependencies {
     // Test dependencies: kotlin-test and Junit 5
     testImplementation(kotlin("test"))
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
-    testImplementation("io.kotlintest:kotlintest-assertions:3.4.2")
+    testImplementation("io.kotest:kotest-assertions-core:5.8.1")
     testImplementation(gradleTestKit())
 
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
