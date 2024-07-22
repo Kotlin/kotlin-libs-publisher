@@ -26,7 +26,7 @@ class PublicationsExtension(private val project: Project) {
     private var _pomConfigurator: PomConfigurator? = null
     private var _signingCredentials: SigningCredentials? = null
     private var _sonatypeSettings: SonatypeSettings? = null
-    private val _repositoryConfigurators = mutableListOf<Action<in RepositoryHandler>>()
+    private val _repositoryConfigurators = mutableListOf<RepositoryConfigurator>()
 
     /**
      * Default group that is used for publications if not explicitly set in [ArtifactPublication.groupId]
@@ -144,22 +144,53 @@ class PublicationsExtension(private val project: Project) {
         publication(res)
     }
 
-    /**
-     * Configure repositories publishing to that will be bound to [PUBLISH_LOCAL_TASK] task
-     */
-    @Suppress("unused")
-    fun localRepositories(configure: Action<in RepositoryHandler>) {
-        _repositoryConfigurators.add(configure)
+    private fun repositories(configure: Closure<in RepositoryHandler>, isLocal: Boolean) {
+        _repositoryConfigurators.add(
+            RepositoryConfigurator(
+                {
+                    project.configure(this as Any, configure)
+                },
+                isLocal = isLocal
+            )
+        )
+    }
+
+    private fun repositories(configure: Action<in RepositoryHandler>, isLocal: Boolean) {
+        _repositoryConfigurators.add(
+            RepositoryConfigurator(configure, isLocal = isLocal)
+        )
     }
 
     /**
-     * Configure repositories publishing to that will be bound to [PUBLISH_LOCAL_TASK] task
+     * Configure repositories. Publishing to them will be bound to [PUBLISH_LOCAL_TASK] task
+     */
+    @Suppress("unused")
+    fun localRepositories(configure: Action<in RepositoryHandler>) {
+        repositories(configure, isLocal = true)
+    }
+
+    /**
+     * Configure repositories. Publishing to them will be bound to [PUBLISH_LOCAL_TASK] task
      */
     @Suppress("unused")
     fun localRepositories(configure: Closure<in RepositoryHandler>) {
-        _repositoryConfigurators.add {
-            project.configure(this as Any, configure)
-        }
+        repositories(configure, isLocal = true)
+    }
+
+    /**
+     * Configure repositories. Publishing to them will NOT be bound to [PUBLISH_LOCAL_TASK] task
+     */
+    @Suppress("unused")
+    fun remoteRepositories(configure: Action<in RepositoryHandler>) {
+        repositories(configure, isLocal = false)
+    }
+
+    /**
+     * Configure repositories. Publishing to them will NOT be bound to [PUBLISH_LOCAL_TASK] task
+     */
+    @Suppress("unused")
+    fun remoteRepositories(configure: Closure<in RepositoryHandler>) {
+        repositories(configure, isLocal = false)
     }
 
     /**
@@ -197,34 +228,44 @@ class PublicationsExtension(private val project: Project) {
         }
     }
 
-    private fun applyRepositoriesWithInheritance(repositoryHandler: RepositoryHandler) {
+    private fun applyRepositoriesWithInheritance(
+        repositoryHandler: RepositoryHandler,
+        repositoryFilter: (RepositoryConfigurator) -> Boolean = { true }
+    ) {
         val extensions = if (inheritRepositories.getOrElse(true)) {
             project.thisWithParents().mapNotNull { it.getPublicationsExtension() }.toList()
         } else listOf(this)
 
-        extensions.flatMap { it._repositoryConfigurators }.forEach {
-            it.execute(repositoryHandler)
-        }
+        extensions
+            .flatMap { it._repositoryConfigurators }
+            .filter(repositoryFilter)
+            .forEach {
+                it.action.execute(repositoryHandler)
+            }
     }
 
     private fun bindPublications() {
         if (!project.rootProject.hasCorrectRootProject()) return
 
-        var repositoryNames = setOf<String>()
+        var localRepositoriesNames = setOf<String>()
 
         project.extensions.configure<PublishingExtension> {
-            repositoryNames = repositories.names.toSet()
+            localRepositoriesNames = repositories.names.toSet()
             repositories {
-                applyRepositoriesWithInheritance(this)
+                applyRepositoriesWithInheritance(this) { it.isLocal }
             }
-            repositoryNames = repositories.names - repositoryNames
+            localRepositoriesNames = repositories.names - localRepositoriesNames
+
+            repositories {
+                applyRepositoriesWithInheritance(this) { !it.isLocal }
+            }
         }
 
         val thisProject = project
 
         project.rootProject.tasks {
             named(PUBLISH_LOCAL_TASK) {
-                repositoryNames.forEach { repoName ->
+                for (repoName in localRepositoriesNames) {
                     dependsOn(thisProject.tasks[getPublishTaskName(repoName)])
                 }
             }
@@ -337,6 +378,11 @@ class PublicationsExtension(private val project: Project) {
             mustRunAfter(PUBLISH_TO_SONATYPE_WITH_EXCLUDING_TASK)
         }
     }
+
+    private class RepositoryConfigurator(
+        val action: Action<in RepositoryHandler>,
+        val isLocal: Boolean,
+    )
 
     companion object {
         const val NAME = "kotlinPublications"
