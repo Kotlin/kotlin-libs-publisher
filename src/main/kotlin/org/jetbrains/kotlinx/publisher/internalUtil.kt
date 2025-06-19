@@ -49,12 +49,14 @@ internal fun Project.afterAllParentsEvaluate(action: () -> Unit) {
 
 internal fun getPublishTaskName(repoName: String, publicationName: String? = null): String {
     return if (publicationName == null) {
-        "publishAllPublicationsTo${repoName.capitalize()}Repository"
+        "publishAllPublicationsTo${repoName.capitalized()}Repository"
     } else {
-        "publish${publicationName.capitalize()}PublicationTo${repoName.capitalize()}Repository"
+        "publish${publicationName.capitalized()}PublicationTo${repoName.capitalized()}Repository"
     }
 }
 
 internal val Project.defaultGroup: String get() {
     return project.getClosestDefinedProperty { defaultGroup } ?: project.group.toString()
 }
+
+internal fun String.capitalized() = replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
