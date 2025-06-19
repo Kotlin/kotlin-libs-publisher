@@ -1,8 +1,8 @@
 plugins {
     `java-gradle-plugin`
-    id("com.gradle.plugin-publish") version "0.21.0"
-    kotlin("libs.publisher") version "1.8.10-dev-42"
-    id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
+    alias(libs.plugins.plugin.publish)
+    alias(libs.plugins.bootstrapLibsPublisher)
+    alias(libs.plugins.ktlint)
     `kotlin-dsl`
 }
 
@@ -30,28 +30,26 @@ val detectVersionForTC by tasks.registering {
     }
 }
 
-val junitVersion: String by project
-
 repositories {
     mavenCentral()
     gradlePluginPortal()
 }
 
 dependencies {
-    implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.9.20")
-    implementation("io.github.gradle-nexus:publish-plugin:1.1.0")
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.20")
+    implementation(libs.dokkaGradlePlugin)
+    implementation(libs.nexusPublishPlugin)
+    implementation(libs.kotlinGradlePlugin)
 
     // For maven-publish
     implementation(gradleApi())
 
     // Test dependencies: kotlin-test and Junit 5
     testImplementation(kotlin("test"))
-    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
-    testImplementation("io.kotest:kotest-assertions-core:5.8.1")
+    testImplementation(libs.test.junit.api)
+    testImplementation(libs.kotest.assertions)
     testImplementation(gradleTestKit())
 
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+    testRuntimeOnly(libs.test.junit.engine)
 }
 
 java {

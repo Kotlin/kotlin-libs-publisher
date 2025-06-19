@@ -1,0 +1,23 @@
+[versions]
+# We use an earlier version of this plugin to release itself.
+bootstrapKotlinLibsPublisher = "1.8.10-dev-42" # https://plugins.gradle.org/plugin/org.jetbrains.kotlin.libs.publisher
+dokka = "1.9.20" # https://github.com/Kotlin/dokka
+kotest = "5.8.1" # https://github.com/kotest/kotest
+kotlin = "1.9.20" # https://github.com/JetBrains/kotlin
+ktlintGradle = "10.0.0" # https://github.com/JLLeitschuh/ktlint-gradle
+junit = "5.10.2" # https://github.com/junit-team/junit5/
+pluginPublishPlugin = "0.21.0" # https://plugins.gradle.org/plugin/com.gradle.plugin-publish
+nexusGradlePublishPlugin = "1.1.0" # https://plugins.gradle.org/plugin/io.github.gradle-nexus.publish-plugin
+
+[libraries]
+dokkaGradlePlugin = { group = "org.jetbrains.dokka", name = "dokka-gradle-plugin", version.ref = "dokka" }
+kotest-assertions = { group = "io.kotest", name = "kotest-assertions-core", version.ref="kotest" }
+kotlinGradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+nexusPublishPlugin = { group = "io.github.gradle-nexus", name = "publish-plugin", version.ref = "nexusGradlePublishPlugin" }
+test-junit-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit" }
+test-junit-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit" }
+
+[plugins]
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlintGradle" }
+plugin-publish = { id = "com.gradle.plugin-publish", version.ref = "pluginPublishPlugin" }
+bootstrapLibsPublisher = { id = "org.jetbrains.kotlin.libs.publisher", version.ref = "bootstrapKotlinLibsPublisher" }
