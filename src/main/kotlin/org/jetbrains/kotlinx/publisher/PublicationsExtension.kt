@@ -219,7 +219,7 @@ class PublicationsExtension(private val project: Project) {
     fun RepositoryHandler.defaultLocalMavenRepository() = localMavenRepository(
         "Local",
         project.findProperty("localPublicationsRepo")
-            ?: project.buildDir.toPath().resolve("artifacts/maven")
+            ?: project.layout.buildDirectory.dir("artifacts/maven")
     )
 
     private fun registerAsRootProject() {
@@ -284,10 +284,10 @@ class PublicationsExtension(private val project: Project) {
 
         project.tasks {
             named<DokkaTask>(DOKKA_HTML_TASK) {
-                outputDirectory.set(project.buildDir.resolve("dokkaHtml"))
+                outputDirectory.set(project.layout.buildDirectory.dir("dokkaHtml"))
             }
 
-            val javadocDestDir = project.buildDir.resolve("dokkaJavadoc")
+            val javadocDestDir = project.layout.buildDirectory.dir("dokkaJavadoc")
 
             val dokkaJavadoc = named<DokkaTask>(DOKKA_JAVADOC_TASK) {
                 outputDirectory.set(javadocDestDir)
@@ -392,7 +392,7 @@ class PublicationsExtension(private val project: Project) {
         private const val SONATYPE_REPOSITORY_NAME = "Sonatype"
         private const val PUBLISH_TO_SONATYPE_WITH_EXCLUDING_TASK = "publishToSonatypeWithExcluding"
         private const val PUBLISH_TO_SONATYPE_AND_RELEASE_TASK = "publishToSonatypeAndRelease"
-        private const val CLOSE_AND_RELEASE_TASK = "closeAndReleaseStagingRepository"
+        private const val CLOSE_AND_RELEASE_TASK = "closeAndReleaseStagingRepositories"
 
         private const val DOKKA_HTML_TASK = "dokkaHtml"
         private const val DOKKA_JAVADOC_TASK = "dokkaJavadoc"
