@@ -394,6 +394,9 @@ class PublicationsExtension(private val project: Project) {
         private const val PUBLISH_TO_SONATYPE_AND_RELEASE_TASK = "publishToSonatypeAndRelease"
         private const val CLOSE_AND_RELEASE_TASK = "closeAndReleaseStagingRepositories"
 
+        // Preparing for Dokka V2
+        // private const val DOKKA_HTML_TASK = "dokkaGeneratePublicationHtml"
+        // private const val DOKKA_JAVADOC_TASK = "dokkaGeneratePublicationJavadoc"
         private const val DOKKA_HTML_TASK = "dokkaHtml"
         private const val DOKKA_JAVADOC_TASK = "dokkaJavadoc"
         private const val JAVADOC_JAR_TASK = "javadocJar"

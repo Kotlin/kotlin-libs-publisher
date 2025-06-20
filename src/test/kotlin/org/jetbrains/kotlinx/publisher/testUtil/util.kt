@@ -12,7 +12,8 @@ private const val TASKS_TASK = "tasks"
 private val TEST_DATA_DIR = File("src/test/testData")
 private val DEFAULT_TEST_BUILD_OPTIONS = listOf(
     "--stacktrace",
-    "--info"
+    "--info",
+    "-Porg.jetbrains.dokka.experimental.gradle.pluginMode=V1Enabled"
 )
 
 val File.isGradleFile: Boolean get() {
