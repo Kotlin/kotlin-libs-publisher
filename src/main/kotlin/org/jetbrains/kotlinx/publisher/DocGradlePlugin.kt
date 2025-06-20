@@ -8,7 +8,6 @@ import org.gradle.process.ExecResult
 import org.gradle.process.ExecSpec
 import org.jetbrains.dokka.gradle.AbstractDokkaTask
 import org.jetbrains.dokka.gradle.DokkaPlugin
-import org.jetbrains.dokka.gradle.formats.DokkaJavadocPlugin
 import java.io.OutputStream
 
 @Suppress("unused")
