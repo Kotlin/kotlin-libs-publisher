@@ -8,6 +8,7 @@ import org.gradle.process.ExecResult
 import org.gradle.process.ExecSpec
 import org.jetbrains.dokka.gradle.AbstractDokkaTask
 import org.jetbrains.dokka.gradle.DokkaPlugin
+import org.jetbrains.dokka.gradle.formats.DokkaJavadocPlugin
 import java.io.OutputStream
 
 @Suppress("unused")
@@ -15,6 +16,8 @@ class DocGradlePlugin : Plugin<Project> {
     override fun apply(target: Project): Unit = with(target) {
         pluginManager.run {
             apply(DokkaPlugin::class.java)
+            // Preparing for Dokka V2 plugin
+            // apply(DokkaJavadocPlugin::class.java)
         }
 
         val dokkaTaskName = if (subprojects.isEmpty()) DOKKA_HTML_TASK else DOKKA_HTML_MULTI_MODULE_TASK

@@ -36,7 +36,7 @@ repositories {
 }
 
 dependencies {
-    implementation(libs.dokkaGradlePlugin)
+    implementation(libs.dokkaGradlePlugin.html)
     implementation(libs.nexusPublishPlugin)
     implementation(libs.kotlinGradlePlugin)
 
@@ -109,12 +109,5 @@ gradlePlugin {
 kotlinPublications {
     localRepositories {
         defaultLocalMavenRepository()
-    }
-}
-
-tasks.whenTaskAdded {
-    val task = this
-    if (task.name == "generateMetadataFileForPluginMavenPublication") {
-        task.mustRunAfter(":publishPluginJar", ":publishPluginJavaDocsJar")
     }
 }

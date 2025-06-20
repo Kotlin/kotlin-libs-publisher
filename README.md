@@ -176,8 +176,8 @@ kotlinPublications {
 
 ## Docs plugin
 
-This plugin allows publishing HTML version of documentation generated with dokka
-to git repository that may be rendered with GitHub Pages.
+This plugin enables publishing the HTML version of Dokka-generated documentation
+to a Git repository, allowing it to be rendered via GitHub Pages.
 
 ### Setup for the root project
 
