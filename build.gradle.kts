@@ -110,4 +110,8 @@ kotlinPublications {
     localRepositories {
         defaultLocalMavenRepository()
     }
+    signing {
+        // We do not need signing for the Gradle Plugin Portal
+        isRequired = false
+    }
 }
