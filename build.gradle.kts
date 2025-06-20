@@ -94,11 +94,15 @@ gradlePlugin {
     vcsUrl.set(website.get())
     plugins {
         create(publishingPlugin) {
+            displayName = "Kotlin Libraries Publisher"
+            description = "Plugin that allows configuring maven publications with less code, especially for multi-module libraries."
             id = "org.jetbrains.kotlin.libs.publisher"
             implementationClass = "org.jetbrains.kotlinx.publisher.ApiPublishGradlePlugin"
             tags.set(listOf("kotlin", "publishing"))
         }
         create(docPlugin) {
+            displayName = "Kotlin Libraries Documentation Publisher"
+            description = "Plugin that enables publishing the HTML version of Dokka-generated documentation to a Git repository, allowing it to be rendered via GitHub Pages."
             id = "org.jetbrains.kotlin.libs.doc"
             implementationClass = "org.jetbrains.kotlinx.publisher.DocGradlePlugin"
             tags.set(listOf("kotlin", "documentation"))
