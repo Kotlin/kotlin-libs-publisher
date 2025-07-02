@@ -3,7 +3,7 @@
 bootstrapKotlinLibsPublisher = "2.2.0-rc3-dev-55" # https://plugins.gradle.org/plugin/org.jetbrains.kotlin.libs.publisher
 dokka = "2.0.0" # https://github.com/Kotlin/dokka
 kotest = "5.8.1" # https://github.com/kotest/kotest
-kotlin = "2.2.0-RC3" # https://github.com/JetBrains/kotlin
+kotlin = "2.2.0" # https://github.com/JetBrains/kotlin
 ktlintGradle = "10.0.0" # https://github.com/JLLeitschuh/ktlint-gradle
 junit = "5.10.2" # https://github.com/junit-team/junit5/
 pluginPublishPlugin = "1.3.1" # https://plugins.gradle.org/plugin/com.gradle.plugin-publish
