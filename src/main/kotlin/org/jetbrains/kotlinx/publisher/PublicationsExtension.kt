@@ -21,6 +21,7 @@ import org.gradle.kotlin.dsl.named
 import org.gradle.kotlin.dsl.property
 import org.gradle.plugins.signing.SigningExtension
 import org.jetbrains.dokka.gradle.DokkaTask
+import java.net.URI
 
 class PublicationsExtension(private val project: Project) {
     private var _pomConfigurator: PomConfigurator? = null
@@ -352,6 +353,10 @@ class PublicationsExtension(private val project: Project) {
 
             repositories {
                 sonatype {
+                    // URL's required for new Central Publishing, replacing OSSRH publishing.
+                    // See https://github.com/gradle-nexus/publish-plugin?tab=readme-ov-file#publishing-to-maven-central-via-sonatype-central
+                    nexusUrl.set(URI("https://ossrh-staging-api.central.sonatype.com/service/local/"))
+                    snapshotRepositoryUrl.set(URI("https://central.sonatype.com/repository/maven-snapshots/"))
                     username.set(settings.username)
                     password.set(settings.password)
                 }
