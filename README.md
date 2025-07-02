@@ -6,7 +6,9 @@
 
 # Kotlin libraries publishing plugin: simple publishing setup for Kotlin libraries
 
-Publish Kotlin libraries to local Maven repositories or to Sonatype (Maven Central) with ease!
+Publish Kotlin libraries to local Maven repositories or to Maven Central (through Sonatype Central) with ease!
+This plugin only supports the new Sonatype Central release process. See [this link](https://central.sonatype.org/pages/ossrh-eol/) 
+for more details.
 
 ## Publishing plugin
 
