@@ -8,7 +8,6 @@ import org.gradle.process.ExecResult
 import org.gradle.process.ExecSpec
 import org.jetbrains.dokka.gradle.AbstractDokkaTask
 import org.jetbrains.dokka.gradle.DokkaPlugin
-import java.io.OutputStream
 
 @Suppress("unused")
 class DocGradlePlugin : Plugin<Project> {
@@ -22,17 +21,17 @@ class DocGradlePlugin : Plugin<Project> {
         val dokkaTaskName = if (subprojects.isEmpty()) DOKKA_HTML_TASK else DOKKA_HTML_MULTI_MODULE_TASK
         val dokkaTask = tasks.named<AbstractDokkaTask>(dokkaTaskName).get()
         val dokkaOutput = dokkaTask.outputDirectory.get()
-        val docRepoDir = buildDir.resolve("docRepo").absoluteFile
+        val docRepoDir = layout.buildDirectory.file("docRepo").get().asFile
         docRepoDir.deleteRecursively()
 
         fun execGit(vararg args: String, configure: ExecSpec.() -> Unit = {}): ExecResult {
-            return exec {
+            return providers.exec {
                 this.executable = "git"
                 this.args = args.asList()
                 this.workingDir = docRepoDir
 
                 configure()
-            }
+            }.result.get()
         }
 
         tasks.register<PublishDocsTask>("publishDocs") {
@@ -61,11 +60,7 @@ class DocGradlePlugin : Plugin<Project> {
                     isIgnoreExitValue = true
                 }
                 if (commitResult.exitValue == 0) {
-                    execGit("push", "-u", repoUrl, branchName) {
-                        this.standardOutput = object : OutputStream() {
-                            override fun write(b: Int) { }
-                        }
-                    }
+                    execGit("push", "-u", repoUrl, branchName)
                 }
             }
         }
