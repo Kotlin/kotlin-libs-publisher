@@ -1,6 +1,6 @@
 [versions]
 # We use an earlier version of this plugin to release itself.
-bootstrapKotlinLibsPublisher = "2.2.0-rc3-dev-55" # https://plugins.gradle.org/plugin/org.jetbrains.kotlin.libs.publisher
+bootstrapKotlinLibsPublisher = "2.2.0-dev-65" # https://plugins.gradle.org/plugin/org.jetbrains.kotlin.libs.publisher
 dokka = "2.0.0" # https://github.com/Kotlin/dokka
 kotest = "5.8.1" # https://github.com/kotest/kotest
 kotlin = "2.2.0" # https://github.com/JetBrains/kotlin
