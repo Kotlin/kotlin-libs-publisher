@@ -23,7 +23,7 @@ class BuildResultEx(
 data class BuildScriptOptions(
     val group: String = "kotlin.publisher.samples",
     val version: String = "0.0.1",
-    val kotlinVersion: String = "1.5.31",
+    val kotlinVersion: String = "2.2.0",
     val localPublishRepo: String = "artifacts/maven",
 ) {
     companion object {

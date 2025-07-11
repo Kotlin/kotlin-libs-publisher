@@ -6,20 +6,20 @@ import org.gradle.kotlin.dsl.named
 import org.gradle.kotlin.dsl.register
 import org.gradle.process.ExecResult
 import org.gradle.process.ExecSpec
-import org.jetbrains.dokka.gradle.AbstractDokkaTask
-import org.jetbrains.dokka.gradle.DokkaPlugin
+import org.jetbrains.dokka.gradle.DokkaBasePlugin
+import org.jetbrains.dokka.gradle.formats.DokkaHtmlPlugin
+import org.jetbrains.dokka.gradle.tasks.DokkaGenerateTask
 
 @Suppress("unused")
 class DocGradlePlugin : Plugin<Project> {
     override fun apply(target: Project): Unit = with(target) {
         pluginManager.run {
-            apply(DokkaPlugin::class.java)
-            // Preparing for Dokka V2 plugin
-            // apply(DokkaJavadocPlugin::class.java)
+            apply(DokkaBasePlugin::class.java)
+            apply(DokkaHtmlPlugin::class.java)
         }
 
-        val dokkaTaskName = if (subprojects.isEmpty()) DOKKA_HTML_TASK else DOKKA_HTML_MULTI_MODULE_TASK
-        val dokkaTask = tasks.named<AbstractDokkaTask>(dokkaTaskName).get()
+        val dokkaTaskName = DOKKA_HTML_TASK
+        val dokkaTask = tasks.named<DokkaGenerateTask>(dokkaTaskName).get()
         val dokkaOutput = dokkaTask.outputDirectory.get()
         val docRepoDir = layout.buildDirectory.file("docRepo").get().asFile
         docRepoDir.deleteRecursively()
@@ -67,7 +67,6 @@ class DocGradlePlugin : Plugin<Project> {
     }
 
     companion object {
-        private const val DOKKA_HTML_TASK = "dokkaHtml"
-        private const val DOKKA_HTML_MULTI_MODULE_TASK = "dokkaHtmlMultiModule"
+        private const val DOKKA_HTML_TASK = "dokkaGeneratePublicationHtml"
     }
 }

@@ -13,7 +13,7 @@ private val TEST_DATA_DIR = File("src/test/testData")
 private val DEFAULT_TEST_BUILD_OPTIONS = listOf(
     "--stacktrace",
     "--info",
-    "-Porg.jetbrains.dokka.experimental.gradle.pluginMode=V1Enabled"
+    "-Porg.jetbrains.dokka.experimental.gradle.pluginMode=V2Enabled"
 )
 
 val File.isGradleFile: Boolean get() {

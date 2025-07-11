@@ -20,7 +20,8 @@ import org.gradle.kotlin.dsl.invoke
 import org.gradle.kotlin.dsl.named
 import org.gradle.kotlin.dsl.property
 import org.gradle.plugins.signing.SigningExtension
-import org.jetbrains.dokka.gradle.DokkaTask
+import org.jetbrains.dokka.gradle.tasks.DokkaGenerateTask
+import org.jetbrains.kotlinx.publisher.PublicationsExtension.Companion.PUBLISH_LOCAL_TASK
 import java.net.URI
 
 class PublicationsExtension(private val project: Project) {
@@ -284,13 +285,13 @@ class PublicationsExtension(private val project: Project) {
         }
 
         project.tasks {
-            named<DokkaTask>(DOKKA_HTML_TASK) {
+            named<DokkaGenerateTask>(DOKKA_HTML_TASK) {
                 outputDirectory.set(project.layout.buildDirectory.dir("dokkaHtml"))
             }
 
             val javadocDestDir = project.layout.buildDirectory.dir("dokkaJavadoc")
 
-            val dokkaJavadoc = named<DokkaTask>(DOKKA_JAVADOC_TASK) {
+            val dokkaJavadoc = named<DokkaGenerateTask>(DOKKA_JAVADOC_TASK) {
                 outputDirectory.set(javadocDestDir)
             }
 
@@ -399,11 +400,8 @@ class PublicationsExtension(private val project: Project) {
         private const val PUBLISH_TO_SONATYPE_AND_RELEASE_TASK = "publishToSonatypeAndRelease"
         private const val CLOSE_AND_RELEASE_TASK = "closeAndReleaseStagingRepositories"
 
-        // Preparing for Dokka V2
-        // private const val DOKKA_HTML_TASK = "dokkaGeneratePublicationHtml"
-        // private const val DOKKA_JAVADOC_TASK = "dokkaGeneratePublicationJavadoc"
-        private const val DOKKA_HTML_TASK = "dokkaHtml"
-        private const val DOKKA_JAVADOC_TASK = "dokkaJavadoc"
+        private const val DOKKA_HTML_TASK = "dokkaGeneratePublicationHtml"
+        private const val DOKKA_JAVADOC_TASK = "dokkaGeneratePublicationJavadoc"
         private const val JAVADOC_JAR_TASK = "javadocJar"
     }
 }
