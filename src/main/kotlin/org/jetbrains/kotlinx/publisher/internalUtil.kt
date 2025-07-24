@@ -59,4 +59,6 @@ internal val Project.defaultGroup: String get() {
     return project.getClosestDefinedProperty { defaultGroup } ?: project.group.toString()
 }
 
+internal val Project.dokkaHtmlOutputDirectory get() = layout.buildDirectory.dir("dokkaHtml")
+
 internal fun String.capitalized() = replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }

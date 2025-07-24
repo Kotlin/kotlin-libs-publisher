@@ -286,7 +286,7 @@ class PublicationsExtension(private val project: Project) {
 
         project.tasks {
             named<DokkaGenerateTask>(DOKKA_HTML_TASK) {
-                outputDirectory.set(project.layout.buildDirectory.dir("dokkaHtml"))
+                outputDirectory.set(project.dokkaHtmlOutputDirectory)
             }
 
             val javadocDestDir = project.layout.buildDirectory.dir("dokkaJavadoc")
