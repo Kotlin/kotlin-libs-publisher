@@ -3,14 +3,12 @@ package org.jetbrains.kotlinx.publisher
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.file.DuplicatesStrategy
-import org.gradle.kotlin.dsl.named
 import org.gradle.kotlin.dsl.register
 import org.gradle.process.ExecResult
 import org.gradle.process.ExecSpec
 import org.intellij.lang.annotations.Language
 import org.jetbrains.dokka.gradle.DokkaBasePlugin
 import org.jetbrains.dokka.gradle.formats.DokkaHtmlPlugin
-import org.jetbrains.dokka.gradle.tasks.DokkaGenerateTask
 
 @Suppress("unused")
 class DocGradlePlugin : Plugin<Project> {
@@ -21,7 +19,6 @@ class DocGradlePlugin : Plugin<Project> {
         }
 
         val dokkaTaskName = DOKKA_HTML_TASK
-        val dokkaTask = tasks.named<DokkaGenerateTask>(dokkaTaskName).get()
         val docRepoDir = layout.buildDirectory.file("docRepo").get().asFile
         docRepoDir.deleteRecursively()
 
@@ -37,7 +34,9 @@ class DocGradlePlugin : Plugin<Project> {
 
         tasks.register<PublishDocsTask>("publishDocs") {
             group = PUBLISHING_GROUP
-            dependsOn(dokkaTask)
+            for (project in rootProject.allprojects) {
+                dependsOn("${project.path}:$dokkaTaskName")
+            }
 
             doLast {
                 val repoUrl = docsRepoUrl.get()
