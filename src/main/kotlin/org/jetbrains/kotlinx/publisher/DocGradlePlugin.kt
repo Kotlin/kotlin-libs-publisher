@@ -35,7 +35,9 @@ class DocGradlePlugin : Plugin<Project> {
         tasks.register<PublishDocsTask>("publishDocs") {
             group = PUBLISHING_GROUP
             for (project in rootProject.allprojects) {
-                dependsOn("${project.path}:$dokkaTaskName")
+                project.tasks.findByName(dokkaTaskName)?.let { task ->
+                    dependsOn(task)
+                }
             }
 
             doLast {
